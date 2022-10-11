@@ -6,6 +6,7 @@ import '../constants/image_urls.dart';
 import '../functions/navigation_functions.dart';
 import 'Services/api_urls.dart';
 import 'functions/global_Var.dart';
+import 'functions/global_functions.dart';
 import 'pages/profile_after_signup.dart';
 import 'pages/welcome_page.dart';
 import 'services/auth.dart';
@@ -29,6 +30,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   }
 
   check() async{
+    currentPosition = await determinePosition();
     if(await isUserLoggedIn()){
       print('isUserLoggedIn');
       var id = await getCurrentUserId();

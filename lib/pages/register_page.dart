@@ -4,6 +4,7 @@ import 'package:country_pickers/country_pickers.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:oneplus/constants/colors.dart';
 import 'package:oneplus/constants/constans.dart';
 import 'package:oneplus/functions/global_Var.dart';
@@ -24,6 +25,8 @@ import 'package:oneplus/widgets/showSnackbar.dart';
 
 import '../constants/image_urls.dart';
 import '../constants/sized_box.dart';
+import '../functions/get_city_and_country_from_latlng.dart';
+import '../functions/global_functions.dart';
 import '../widgets/buttons.dart';
 
 class Register_Page extends StatefulWidget {
@@ -46,8 +49,34 @@ class _Register_PageState extends State<Register_Page> {
     'Undefined',
   ];
   int _selectedIndex = 0;
+
+  getLocation()async{
+    if(currentPosition==null){
+      currentPosition = await determinePosition();
+
+    }
+    print('the location is ${currentPosition?.latitude}');
+    var address = await getCityAndCountryFromLatLong(currentPosition!);
+    country.text = address.country??'';
+    city.text= address.locality??'';
+    var flag = CountryPickerUtils.getFlagImageAssetPath(address.isoCountryCode??'IND');
+    print('contry flat----$flag');
+    country_flag=flag;
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         backgroundColor: MyColors.white,
         appBar: appBar(context: context, appBarColor: Colors.transparent),
